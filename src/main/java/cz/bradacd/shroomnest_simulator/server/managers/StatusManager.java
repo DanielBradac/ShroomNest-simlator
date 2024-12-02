@@ -1,12 +1,25 @@
 package cz.bradacd.shroomnest_simulator.server.managers;
 
+import cz.bradacd.shroomnest_simulator.api.entities.Status;
 import cz.bradacd.shroomnest_simulator.server.Server;
+import cz.bradacd.shroomnest_simulator.utils.MathUtils;
 
-// Status manager is thread safe - only it can change its state
-public class StatusManager {
+/*
+    Singleton class, which manages current temperature and humidity state
+ */
+public class StatusManager implements SerializableManager {
+    private static StatusManager instance = null;
+    public static StatusManager getInstance()
+    {
+        if (instance == null)
+            instance = new StatusManager();
 
-    private static double humidity;
-    private static double temperature;
+        return instance;
+    }
+
+    // Initialise on common values
+    private static double humidity = 60;
+    private static double temperature = 20;
 
     public static double getHumidity() {
         return humidity;
@@ -45,7 +58,6 @@ public class StatusManager {
     }
 
     public static void updateStatus() {
-
         var changeMultiplier = Server.SERVER_PERIOD / 1000;
 
         // If humidifier on and fan off -> humidity goes up by 0.05 %
@@ -62,4 +74,8 @@ public class StatusManager {
     }
 
 
+    @Override
+    public Status getRecord() {
+        return new Status(MathUtils.roundToTwoDecimals(humidity), MathUtils.roundToTwoDecimals(temperature));
+    }
 }
