@@ -9,11 +9,10 @@ import cz.bradacd.shroomnest_simulator.utils.MathUtils;
  */
 public class StatusManager implements SerializableManager {
     private static StatusManager instance = null;
-    public static StatusManager getInstance()
-    {
-        if (instance == null)
+    public static synchronized StatusManager getInstance() {
+        if (instance == null) {
             instance = new StatusManager();
-
+        }
         return instance;
     }
 
