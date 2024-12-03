@@ -1,20 +1,18 @@
 package cz.bradacd.shroomnest_simulator.server.managers;
 
-import cz.bradacd.shroomnest_simulator.api.entities.Status;
+import cz.bradacd.shroomnest_simulator.records.Status;
 import cz.bradacd.shroomnest_simulator.server.Server;
 import cz.bradacd.shroomnest_simulator.utils.MathUtils;
 
 /*
     Singleton class, which manages current temperature and humidity state
  */
-public class StatusManager implements SerializableManager {
-    private static StatusManager instance = null;
-    public static synchronized StatusManager getInstance() {
-        if (instance == null) {
-            instance = new StatusManager();
-        }
+public class StatusManagerSingleton implements SerializableManager {
+    private static final StatusManagerSingleton instance = new StatusManagerSingleton();
+    public static StatusManagerSingleton getInstance() {
         return instance;
     }
+    private StatusManagerSingleton() {}
 
     // Initialise on common values
     private static double humidity = 60;

@@ -1,4 +1,4 @@
-package cz.bradacd.shroomnest_simulator.api.entities;
+package cz.bradacd.shroomnest_simulator.records;
 
 public record IPSettings(
         String humidifierIp,

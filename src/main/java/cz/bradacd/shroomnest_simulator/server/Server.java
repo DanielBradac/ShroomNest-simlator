@@ -1,6 +1,6 @@
 package cz.bradacd.shroomnest_simulator.server;
 
-import cz.bradacd.shroomnest_simulator.server.managers.StatusManager;
+import cz.bradacd.shroomnest_simulator.server.managers.StatusManagerSingleton;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -48,7 +48,7 @@ public class Server {
     }
 
     private void updateShroomNestState() {
-        StatusManager.updateStatus();
+        StatusManagerSingleton.updateStatus();
     }
 
     private void errandRun() {
