@@ -1,8 +1,9 @@
 package cz.bradacd.shroomnest_simulator.api;
 
-import cz.bradacd.shroomnest_simulator.records.IPSettings;
-import cz.bradacd.shroomnest_simulator.records.Logs;
-import cz.bradacd.shroomnest_simulator.records.Status;
+import cz.bradacd.shroomnest_simulator.exceptions.BadRequestException;
+import cz.bradacd.shroomnest_simulator.exceptions.ValidationException;
+import cz.bradacd.shroomnest_simulator.records.*;
+import cz.bradacd.shroomnest_simulator.server.managers.HumidityManagerSingleton;
 import cz.bradacd.shroomnest_simulator.server.managers.IPManagerSingleton;
 import cz.bradacd.shroomnest_simulator.server.managers.LogManagerSingleton;
 import cz.bradacd.shroomnest_simulator.server.managers.StatusManagerSingleton;
@@ -17,16 +18,33 @@ public class Controller {
         return StatusManagerSingleton.getInstance().getRecord();
     }
 
+    @GetMapping(Paths.GET_LOGS)
+    public Logs getLogs() {
+        return LogManagerSingleton.getInstance().getRecord();
+    }
+
+    @GetMapping(Paths.GET_HUMIDITY_SETTINGS)
+    public HumiditySettings getHumiditySettings() {
+        return HumidityManagerSingleton.getInstance().getRecord();
+    }
+
+    @PostMapping(Paths.UPDATE_HUMIDITY_SETTINGS)
+    public HumiditySettings updateHumiditySettings(@RequestBody HumiditySettingsInput newSettings) {
+        HumidityManagerSingleton manager = HumidityManagerSingleton.getInstance();
+        try {
+            manager.updateValues(newSettings);
+        } catch (ValidationException e) {
+            throw new BadRequestException(e.getMessage());
+        }
+
+        return manager.getRecord();
+    }
+
     @PostMapping(Paths.UPDATE_IP_SETTINGS)
     public IPSettings updateIPSettings(@RequestBody IPSettings newSettings) {
         IPManagerSingleton manager = IPManagerSingleton.getInstance();
         manager.updateValues(newSettings);
         return manager.getRecord();
-    }
-
-    @GetMapping(Paths.GET_LOGS)
-    public Logs getLogs() {
-        return LogManagerSingleton.getInstance().getRecord();
     }
 
     @PostMapping(Paths.PURGE_LOGS)

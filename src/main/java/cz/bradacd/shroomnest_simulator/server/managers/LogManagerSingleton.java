@@ -25,7 +25,7 @@ public class LogManagerSingleton implements SerializableManager {
         ERROR
     }
 
-    public void logMessage(String message, String header, Levels level) {
+    public void logMessage(Levels level, String header, String message) {
         if (level == null) {
             throw new IllegalArgumentException("Level is mandatory");
         }
